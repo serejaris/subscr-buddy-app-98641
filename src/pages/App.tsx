@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus, TrendingUp } from "lucide-react";
 import { SubscriptionList } from "@/components/SubscriptionList";
@@ -16,35 +16,45 @@ export interface Subscription {
 }
 
 const AppPage = () => {
-  const [subscriptions, setSubscriptions] = useState<Subscription[]>([
-    {
-      id: "1",
-      name: "Netflix",
-      price: 599,
-      billingCycle: "monthly",
-      nextBillingDate: "2025-11-15",
-      category: "Развлечения",
-      color: "bg-red-500",
-    },
-    {
-      id: "2",
-      name: "Spotify",
-      price: 169,
-      billingCycle: "monthly",
-      nextBillingDate: "2025-11-10",
-      category: "Музыка",
-      color: "bg-green-500",
-    },
-    {
-      id: "3",
-      name: "YouTube Premium",
-      price: 199,
-      billingCycle: "monthly",
-      nextBillingDate: "2025-11-20",
-      category: "Развлечения",
-      color: "bg-red-600",
-    },
-  ]);
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>(() => {
+    const saved = localStorage.getItem("subscriptions");
+    if (saved) {
+      return JSON.parse(saved);
+    }
+    return [
+      {
+        id: "1",
+        name: "Netflix",
+        price: 599,
+        billingCycle: "monthly",
+        nextBillingDate: "2025-11-15",
+        category: "Развлечения",
+        color: "bg-red-500",
+      },
+      {
+        id: "2",
+        name: "Spotify",
+        price: 169,
+        billingCycle: "monthly",
+        nextBillingDate: "2025-11-10",
+        category: "Музыка",
+        color: "bg-green-500",
+      },
+      {
+        id: "3",
+        name: "YouTube Premium",
+        price: 199,
+        billingCycle: "monthly",
+        nextBillingDate: "2025-11-20",
+        category: "Развлечения",
+        color: "bg-red-600",
+      },
+    ];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("subscriptions", JSON.stringify(subscriptions));
+  }, [subscriptions]);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
